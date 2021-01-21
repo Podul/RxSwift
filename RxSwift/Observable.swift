@@ -9,6 +9,8 @@
 /// A type-erased `ObservableType`. 
 ///
 /// It represents a push style sequence.
+
+@dynamicMemberLookup
 public class Observable<Element> : ObservableType {
     init() {
 #if TRACE_RESOURCES
@@ -29,3 +31,9 @@ public class Observable<Element> : ObservableType {
     }
 }
 
+
+extension Observable {
+    public subscript<Subject>(dynamicMember keyPath: KeyPath<Element, Subject>) -> Observable<Subject> {
+        get { map { $0[keyPath: keyPath] } }
+    }
+}
